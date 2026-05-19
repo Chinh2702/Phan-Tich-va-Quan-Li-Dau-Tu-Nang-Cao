@@ -1,0 +1,36 @@
+1. Phân tích vĩ mô của Việt Nam 
+    --> Nhóm đưa ra kết luận như sau:
+        Phân tích vĩ mô cho thấy Việt Nam đã bước qua giai đoạn tăng trưởng dựa nhiều vào tín dụng và thương mại, để tiến tới mô hình cân bằng hơn, kết hợp giữa hội nhập quốc tế và sức cầu nội địa. 
+        Điều này định hình triển vọng đầu tư như sau: 
+            - Ngành hưởng lợi từ hội nhập: xuất khẩu, sản xuất công nghiệp, hạ tầng.
+            - Ngành nhạy với chu kỳ tiền tệ: ngân hàng, bất động sản, năng lượng.
+            - Ngành dài hạn dựa vào nội lực: công nghệ, dịch vụ, tiêu dùng nội địa.
+
+2. Xác định chiến lược và giả định
+    * Chiến lược của nhóm đưa ra là "ĐẦU TƯ TĂNG TRƯỞNG"
+        --> Tức là tìm kiếm các doanh nghiệp có lợi nhuận, doanh thu hoặc thị phần tăng trưởng nhanh hơn mức trung bình của ngành. Thường phù hợp với khẩu vị rủi ro cao.
+    * Tách cổ phiếu theo ngành và phân tích để chọn các mã cổ phiếu tối ưu
+        - Tính toán các giá trị Fundamentals of Return cho danh mục cổ phiểu
+            - Close_prev (Giá đóng cửa phiên trước):
+                --> Lưu trữ giá đóng cửa của ngày giao dịch liền trước đối với cùng một mã cổ phiếu.
+                --> Mục đích: Đây là mốc tham chiếu (gốc toán học) để tính toán mọi biến động tăng giảm của ngày hôm nay. Nếu không có bước groupby(symbol_col), dữ liệu ngày đầu tiên của cổ phiếu B sẽ bị lấy nhầm giá của ngày cuối cùng của cổ phiếu A.
+            - price_change (Biến động giá tuyệt đối):
+                -> Ý nghĩa: Số tiền tăng hoặc giảm (tính bằng VND) của cổ phiếu so với ngày hôm trước Close - Close_prev
+                --> Hạn chế: Biến này chỉ cho biết giá trị tuyệt đối, không thể dùng để so sánh sức mạnh giữa các cổ phiếu. (Ví dụ: FPT tăng 2.000đ từ mốc 100.000đ chỉ là tăng 2%, nhưng HHV tăng 2.000đ từ mốc 10.000đ lại là tăng tới 20%).
+            - total_cumulative 
+                -->  Tổng lợi nhuận thực tế thu được
+            - average_daily_return	
+                --> 
+            - annualized_return
+                --> Tỷ lệ tăng trưởng kép hàng năm (Compound Annual Growth Rate). Nó trả lời cho câu hỏi: "Với mức tăng trưởng lũy kế tổng hiện tại, tính trung bình ra thì tài sản của bạn đã tăng trưởng đều đặn bao nhiêu phần trăm mỗi năm?"
+            - annualized_return_from_mean 
+                --> Chỉ số này lấy mức lãi trung bình của một ngày (average_daily_return), sau đó giả định rằng ngày nào trong suốt 252 ngày giao dịch của năm cổ phiếu cũng đều đặn tăng/giảm đúng một mức như thế. 
+                --> Chỉ số này mang tính chất lý thuyết toán học nhiều hơn. Trong tài chính, annualized_return_from_mean thường sẽ cao hơn annualized_return thực tế do tác động của biến động giá (Volatility Drag). Sự chênh lệch giữa hai biến này giúp các chuyên gia đánh giá xem cổ phiếu đó tăng trưởng "mượt mà" hay tăng trưởng theo kiểu "trồi sụt thất thường".
+            - annual_return
+            - cash_return & total_return (Tỷ suất lợi nhuận theo ngày):
+                --> Ý nghĩa: Phần trăm lãi/lỗ của cổ phiếu trong ngày (Ví dụ: 0.02 tương đương +2%, -0.01 tương đương -1%).
+                --> Mục đích: Đưa mọi cổ phiếu về cùng một hệ quy chiếu phần trăm để so sánh trực tiếp xem hôm nay mã nào "khỏe" hơn mã nào, bất kể thị giá lớn hay nhỏ.
+            - gross_return (Hệ số sinh lời)
+                --> Ý nghĩa: Số tiền bạn nhận lại được trên mỗi 1 đồng vốn đầu tư sau ngày hôm đó ($1 + r$).
+                --> Ví dụ: Nếu ngày đó cổ phiếu tăng $2% (total_return = 0.02), thì gross_return sẽ là 1.02 (đầu tư 1 đồng, cuối ngày thu về 1.02 đồng). Nếu cổ phiếu giảm $1%, gross_return là 0.99.
+                --> Mục đích: Biến này là bước đệm bắt buộc để tính toán lợi nhuận lũy kế bằng phép toán nhân tích lũy.
